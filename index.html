@@ -25,22 +25,23 @@
         }
     </style>
     <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-locale_pt-br.js"></script>
     <script src="lib/angular/angular-messages.js"></script>
     <script>
         angular.module("listaTelefonica", ["ngMessages"]);
         angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope) {
             $scope.app = "Lista Telefonica";
             $scope.contatos = [
-                { nome: "Pedro", telefone: "99896575" },
-                { nome: "Ana", telefone: "99456575" },
-                { nome: "Maria", telefone: "99987575" }
+                { nome: "Pedro", telefone: "99896575", data: new Date(),operadora: {nome: "Oi", codigo: 14, categoria:"Celular"} },
+                { nome: "Ana", telefone: "99456575" , data: new Date(),operadora: {nome: "Vivo", codigo: 15, categoria:"Celular"} },
+                { nome: "Maria", telefone: "99987575" , data: new Date(),operadora: {nome: "TIM", codigo: 41, categoria:"Celular"} }
             ];
             $scope.operadoras = [
-                {nome: "Oi", codigo: 14, categoria:"Celular"},
-                {nome: "Vivo", codigo: 15, categoria:"Celular"},
-                {nome: "TIM", codigo: 41, categoria:"Celular"},
-                {nome: "GVT", codigo: 25, categoria:"Fixo"},
-                {nome: "Embratel", codigo: 21, categoria:"Fixo"}
+                {nome: "Oi", codigo: 14, categoria:"Celular", preco:2},
+                {nome: "Vivo", codigo: 15, categoria:"Celular", preco:1},
+                {nome: "TIM", codigo: 41, categoria:"Celular", preco:3},
+                {nome: "GVT", codigo: 25, categoria:"Fixo", preco:1},
+                {nome: "Embratel", codigo: 21, categoria:"Fixo", preco:2}
             ];
             $scope.adcionarContato = function (contato) {
                 $scope.contatos.push(angular.copy(contato));    
@@ -57,21 +58,26 @@
                     return contato.selecionado;
                 });
             };
+            $scope.ordernarPor = function (campo){
+                $scope.criterioDeOrdenacao = campo;
+                $scope.direcaoDaOrdencao = !$scope.direcaoDaOrdencao;
+            }
         });
     </script>
 </head>
 
 <body ng-controller="listaTelefonicaCtrl">
     <div class="jumbotron">
-        <h4>{{app}}</h4>
+        <h3>{{app}}</h3>
+        <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você esta buscando?">
         <table class="table table-striped">
             <tr>
                     <th></th>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>Operadora</th>
+                <th><a href="" ng-click="ordernarPor('nome')">Nome</a></th>
+                <th><a href="" ng-click="ordernarPor('telefone')">Telefone</a></th>
+                <th><a href="" ng-click="ordernarPor('operadora')">Operadora</a></th>
             </tr>
-            <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos">
+            <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:{nome:criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDaOrdencao">
                 <td><input type="checkbox" ng-model="contato.selecionado"></td>
                 <td>{{contato.nome}}</td>
                 <td>{{contato.telefone}}</td>
@@ -82,7 +88,7 @@
         <form name="contatoForm">
         <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required=true ng-minlength="10"/>
         <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required=true ng-pattern="/^{\d{4,5}-\d{4}$/"/>
-        <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome  for operadora in operadoras">
+        <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + ' ( ' + (operadora.preco | currency) + ' )'  for operadora in operadoras">
             <option value="">Selecione uma operadora</option>
         </select>
     </form>

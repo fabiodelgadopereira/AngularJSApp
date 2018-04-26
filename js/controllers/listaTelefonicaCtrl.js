@@ -4,10 +4,7 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($s
             $scope.operadoras = [];
 
             var carregarContatos = function () {
-                $http({
-                    method: 'GET',
-                    url: 'http://localhost:3412/contatos'
-                }).then(function (response) {
+                contatosAPI.getContatos().then(function (response) {
                     $scope.contatos = response.data;
                 }, function (error) {
                     $scope.message = "Aconteceu um problema: " + data;
@@ -15,10 +12,7 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($s
             };
 
             var carregarOperadoras = function () {
-                $http({
-                    method: 'GET',
-                    url: 'http://localhost:3412/operadoras'
-                }).then(function (response) {
+                operadorasAPI.getOperadoras().then(function (response) {
                     $scope.operadoras = response.data;
                 }, function (error) {
 

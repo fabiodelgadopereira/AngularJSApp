@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title> Lista Telefonica </title>
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/ui.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular/angular-locale_pt-br.js"></script>
@@ -17,17 +18,22 @@
     <script src="js/value/configValue.js"></script>
     <script src="js/filters/nameFilter.js"></script>
     <script src="js/filters/ellipsisFilter.js"></script>
+    <script src="js/directives/uiAlertDirective.js"></script>
 </head>
 
 <body ng-controller="listaTelefonicaCtrl">
     <div class="jumbotron">
         <h3>{{app}}</h3>
+        <ui-alert title="Ops, aconteceu um problema!">
+			{{error}}
+        </ui-alert>
+
+        
         <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você esta buscando?">
         <table class="table table-striped">
             <tr>
                 <th></th>
-                <th>S
-                    erial</th>
+                <th>Serial</th>
                 <th>
                     <a href="" ng-click="ordernarPor('nome')">Nome</a>
                 </th>

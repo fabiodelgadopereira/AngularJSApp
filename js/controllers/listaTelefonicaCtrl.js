@@ -7,15 +7,19 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($s
                 contatosAPI.getContatos().then(function (response) {
                     $scope.contatos = response.data;
                 }, function (error) {
-                    $scope.message = "Aconteceu um problema: " + data;
+                    $scope.error = [];
+                    $scope.error= "Não foi possível carregar os dados!";
                 });
             };
+
+            
 
             var carregarOperadoras = function () {
                 operadorasAPI.getOperadoras().then(function (response) {
                     $scope.operadoras = response.data;
                 }, function (error) {
-
+                    $scope.error = [];
+                    $scope.error = "Não foi possível carregar os dados!";
                 });
             };
 
